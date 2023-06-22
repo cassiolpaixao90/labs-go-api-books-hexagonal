@@ -7,7 +7,7 @@ type Book struct {
 
 type BookRepository interface {
 	GetByID(ID string) (*Book, error)
-	Save(book *Book) error
+	Save(book *Book) (*Book, error)
 }
 
 func NewBookDomain(ID string, Name string) *Book {

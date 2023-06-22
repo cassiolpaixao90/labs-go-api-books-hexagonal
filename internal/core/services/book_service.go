@@ -6,7 +6,7 @@ import (
 
 type IBookService interface {
 	GetByID(ID string) (*domain.Book, error)
-	Save(user *domain.Book) error
+	Save(book *domain.Book) (*domain.Book, error)
 }
 
 type BookService struct {
@@ -17,12 +17,15 @@ func NewBookService(bookRepository domain.BookRepository) IBookService {
 	return &BookService{bookRepository: bookRepository}
 }
 
-func (b BookService) GetByID(ID string) (*domain.Book, error) {
+func (b *BookService) GetByID(ID string) (*domain.Book, error) {
 	//TODO implement me
-	panic("implement me")
+	return nil, nil
 }
 
-func (b BookService) Save(user *domain.Book) error {
-	//TODO implement me
-	panic("implement me")
+func (b *BookService) Save(book *domain.Book) (*domain.Book, error) {
+	res, err := b.bookRepository.Save(book)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

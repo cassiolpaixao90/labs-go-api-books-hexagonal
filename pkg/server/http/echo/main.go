@@ -3,28 +3,29 @@ package echo
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"go.mongodb.org/mongo-driver/mongo"
 	"labs-go-api-books-hexagonal/internal/api/http"
 	"labs-go-api-books-hexagonal/internal/core/services"
-	"labs-go-api-books-hexagonal/pkg/datasource/database/mongo"
+	"labs-go-api-books-hexagonal/pkg/database/mongodb"
 )
 
 type ServerEcho struct {
+	mongoClient *mongo.Client
 }
 
 type IServerEcho interface {
 	Start()
 }
 
-func NewServerEcho() IServerEcho {
-	return &ServerEcho{}
+func NewServerEcho(mongoClient *mongo.Client) IServerEcho {
+	return &ServerEcho{mongoClient}
 }
 
 func (s *ServerEcho) Start() {
 	e := echo.New()
 	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
 
-	br := mongo.NewBookRepository()
+	br := mongodb.NewBookRepository(s.mongoClient)
 	bs := services.NewBookService(br)
 	bh := http.NewBookHandler(bs)
 

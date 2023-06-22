@@ -1,8 +1,13 @@
 package main
 
-import "labs-go-api-books-hexagonal/pkg/datasource/server/http/echo"
+import (
+	"labs-go-api-books-hexagonal/pkg/database/mongodb"
+	"labs-go-api-books-hexagonal/pkg/server/http/echo"
+)
 
 func main() {
-	s := echo.NewServerEcho()
+	m := mongodb.NewMongoDB()
+	mc := m.Start()
+	s := echo.NewServerEcho(mc)
 	s.Start()
 }
